@@ -1,0 +1,73 @@
+---
+title: "Excercise 9"
+author: "Sarah Nicholls"
+date: "11/12/2021"
+output: html_document
+---
+
+```{r}
+library(dplyr)
+library(data.table)
+```
+
+## Function with directory
+
+```{r function}
+directory_function <- function(dir){
+  
+  #creates a list of the files in the current directory and sets the working directory 
+  file_list <- list.files(dir)
+  coefficient_of_variation <- vector()
+  
+  #asks the user to unput the column number for which they want the coefficient of variation
+  col_num <- readline("Please enter the specified column you would like to calculate the coefficient of variation for each dataset:")
+  col_num <- as.integer(col_num)
+  
+  #checks to see if column number is less than 50
+ 
+  #creates a data table of the correct column number of file selected and calculates the coefficient of variation
+  for (i in 1:length(file_list)){
+    setwd(dir)
+    temp_data <- read.csv(file_list[i])
+    # check to see if column number is valid
+    if(col_num > NCOL(temp_data)){
+      col_num <- readline("Please enter a valid column number: ")
+      col_num <- as.integer(col_num)
+    }
+    
+    temp_data <- temp_data[,col_num]
+    
+    #checks to see if observations are less thann 50
+     if(length(temp_data) < 50){
+    continue <- readline("Your data set has less than 50 observations which is considered less than ideal. Would you still like to continue? Input 'Y' for Yes and 'N' for No: ")
+      if(continue == "N"){
+        print("Goodbye!")
+        break; 
+      }
+  }
+    #checks to see if any NAs are in temp data
+    if(is.null(temp_data) == TRUE){
+          answer <- readline("This dataset includes NA values! Would you like to remove the columns that contain these values? Input 'Y' for Yes and 'N' for No: ")
+        if(answer == "Y"){
+          na.omit(temp_data)
+          }
+        if(answer == "N"){
+          print("We are unable to continue due to the nature of some of these observations! Goodbye!")
+          break
+        }
+    }
+    #calculates the coefficeint of variation
+    coefficient_of_variation[i] <- sd(temp_data)/mean(temp_data)
+    rm(temp_data)
+  }
+  #returns vector
+  return(coefficient_of_variation)
+}
+```
+
+```{r}
+dir <- "/Users/sarahnicholls/Desktop/Practice" 
+directory_function(dir)
+```
+
+
