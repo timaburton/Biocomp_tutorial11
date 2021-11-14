@@ -19,16 +19,19 @@
 VarCof<-function(dir, column, x=50){
   #List files in a variable
   file.list<-list.files(dir)
+  #Empty vector to add results to
   vector<-c()
   #For each of the files, pull out the column of interest
   for (i in 1:length(file.list)){
+    #Read the file as a table so the column can be pulled out
+    file<-read.table(file.list[i], header = TRUE, stringsAsFactors = FALSE)
     interestcol<-file.list[, file.list$column]
     if{(length(interestcol)>x)
       M<-mean(interestcol)
       SD<-sd(interestcol, na.rm = FALSE)
-      output<-SD/M
+      Var<-SD/M
     }else if {(length(interestcol)<x)
-      print("There are not enough observations")
+      print("There are not enough observations to calculate a reliable coefficient of variation")
       M<-mean(interestcol)
       SD<-sd(interestcol, na.rm = FALSE)
       output<-SD/M
