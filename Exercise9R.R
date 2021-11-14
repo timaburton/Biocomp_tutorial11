@@ -16,7 +16,11 @@
 #For an extra credit point, add arguments and associated code to your function to situations where a file
 #doesn’t have the correct number of columns or the provided data includes NA’s.
 
-VarCof<-function(dir, column, x=50){
+#Need to figure out how to override a default for a warning not an error. By having two defaults, changing them gives the output of 50+, one 
+#gives an error for being under 50 with req="Yes", and the last gives a Warning for req="No".By changing x, the minimum number of observations
+#is changed. 
+
+VarCof<-function(dir, column, x=50, req="Yes"){
   #List files in a variable
   file.list<-list.files(dir)
   #Empty vector to add results to
@@ -25,16 +29,28 @@ VarCof<-function(dir, column, x=50){
   for (i in 1:length(file.list)){
     #Read the file as a table so the column can be pulled out
     file<-read.table(file.list[i], header = TRUE, stringsAsFactors = FALSE)
-    interestcol<-file.list[, file.list$column]
-    if{(length(interestcol)>x)
+    #Pull out the column of interest
+    interestcol<-file[, column]
+    #Find the number of observations
+    if(length(interestcol)>x){ #More than X, no error message
+      #Calculate, mean, standard deviation, and variation
       M<-mean(interestcol)
       SD<-sd(interestcol, na.rm = FALSE)
       Var<-SD/M
-    }else if {(length(interestcol)<x)
-      print("There are not enough observations to calculate a reliable coefficient of variation")
-      M<-mean(interestcol)
-      SD<-sd(interestcol, na.rm = FALSE)
-      output<-SD/M
-    }
+      vector<-c(vector, Var)
+      }else if (length(interestcol)<x && req = "Yes"){
+      print("Error: There are not enough observations to calculate a reliable coefficient of variation")
+        vector<-c(vector, NA)
+      }else if (length(interestcol)<x && req = "No"){
+        print("Warning: There are not enough observations to calculate a reliable coefficient of variation")
+        M<-Mean(interestcol)
+        SD<-sd(interestcol)
+        Var<-SD/M
+        vector<-c(vector, Var)
+      }
+     }
+    return(vector)
   }
-}
+
+
+
