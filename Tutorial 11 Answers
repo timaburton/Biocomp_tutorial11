@@ -1,0 +1,23 @@
+directory <- function(dir)
+{filelist <-list.files(dir)
+coefficeint_of_variation <- vector()
+col_num <- readline()
+col_num <- as.integer(col_num)
+for (i in 1:length(filelist))
+{setwd(dir)
+  temp_data <- read.csv(filelist[i])
+  if(col_num > NCOL(temp_data))
+  {col_num <- readline()
+    col_num <- as.integer(col_num)}
+  temp_data <- temp_data [, col_num]
+  if(length(temp_data) < 50)
+  {continue <- readline("'Y' for yes and 'N' for no")
+    if(continue == "N")
+      print("end")
+  break;}}
+coefficent_of_variation [i] <- sd(temp_data)/mean(temp_data)
+rm(temp_data)
+return(coefficent_of_variation)}
+
+directory<- "/Users/madelinelaporte/Desktop/tutorial11"
+directory_function(dir)
