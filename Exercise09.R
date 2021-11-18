@@ -1,13 +1,39 @@
 ### Biocomputing Exercise09 - Pulling the R pieces together
 
-# Create the coefficient of variation vector
-coefficientofvariationVector = vector(mode="numeric", 0)
-
-# Set a working directory 
-setwd(dir)
-inputfiles<-list.files(dir)
-
-# Sets up a loop for the files in the directory to calculate the coefficient of variation
-for (file in inputfiles){
-  file<- read.table(file, header=TRUE, sep=",", stringsAsFactors = FALSE)
+# Defining the function
+CoefficientofVariation <- function(dir,col,nrow=50){
+  
+  # Set a working directory and create the Coefficient of Variation vector
+  setwd(dir)
+  inputfiles<-list.files(dir)
+  coefficientofvariationVector <- numeric(0)
+  
+  # Sets up a loop for the files in the directory to calculate the coefficient of variation
+  for (i in inputfiles){
+    i <- read.csv(i,header=TRUE,sep=",",stringsAsFactors=FALSE, fill=TRUE)
+    if(ncol(i)< col){
+      print("Invalid column number.")
+    }else{
+      if(nrow(i) <50){
+        not50 <- print("Recommended that the file has at least 50 observations to calculate a coefficient of variation. Would you like to proceed? Type 'Y' for Yes and 'N' for No: ")
+        if(not50=="Y"){
+          mean=mean(i[,col])
+          standarddeviation=sd(i[,col])
+          coefficientofvariation=standarddeviation/mean
+          coefficientofvariationVector=c(coefficientofvariationVector,coefficientofvariation)
+        }else{
+          print("Function stopped.")
+        }
+      }else{
+        mean=mean(i[,col])
+        standardeviation=sd(i[,col])
+        coefficientofvariation=standardeviation/mean
+        coefficientofvariationVector=c(coefficientofvariationVector,coefficientofvariation)
+      }
+    }
+  }
+  
+  return(coefficientofvariationVector)
 }
+
+
