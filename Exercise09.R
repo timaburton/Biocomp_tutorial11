@@ -2,8 +2,8 @@
 
 # Defining the function
 CoefficientofVariation <- function(dir,col,nrow=50){
-  
-  # Set a working directory and create the Coefficient of Variation vector
+ 
+   # Set a working directory and create the Coefficient of Variation vector
   setwd(dir)
   inputfiles<-list.files(dir)
   coefficientofvariationVector <- numeric(0)
@@ -35,5 +35,7 @@ CoefficientofVariation <- function(dir,col,nrow=50){
   
   return(coefficientofvariationVector)
 }
+  
+
 
 
