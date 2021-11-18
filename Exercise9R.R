@@ -3,10 +3,11 @@
 
 #VarCof is a function that reads data from each file in the specified directory 
 #and calculates the coefficient of variation. By default, 50 observations are required
-#to get an output. The column of interest must be numerical.
+#to get an output. The column of interest must be numerical and have a header.
 
 #Usage: VarCof(dir = "full directory map", column = "number of column of interest", 
-#x = minimum number of observations (by default, it is 50), override = "Yes" or "No" for if the number of observations needs to be met)
+#x = minimum number of observations (by default, it is 50), override = "Yes" or "No" for 
+#if the number of observations needs to be met)
 
 VarCof<-function(dir, col, x="50", override="No"){
   #Set the working directory to the directory entered
