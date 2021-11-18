@@ -6,7 +6,7 @@
 #to get an output. The column of interest must be numerical.
 
 #Usage: VarCof(dir = "full directory map", column = "number of column of interest", 
-#x = minimum number of observations (by default, it is 50))
+#x = minimum number of observations (by default, it is 50), override = "Yes" or "No" for if the number of observations needs to be met)
 
 VarCof<-function(dir, col, x="50", override="No"){
   #Set the working directory to the directory entered
