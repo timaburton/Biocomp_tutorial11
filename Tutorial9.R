@@ -1,83 +1,59 @@
 setwd("C:/Users/megan/Desktop/r-novice-inflammation/r-novice-inflammation-data/data")
+#list of files
 dir <- list.files("../data", full.names = TRUE)
 dir
+#return vector
 fileCOV <- c()
+#only csv files vector
 usable <- c()
 coeffientOfVariation <- function(dir){
-  csv <- dir[grep(".csv",dir)]
-  table <- dir[grep(".txt",dir)]
-  usable <- c(csv,table)
+  #only csv files
+  usable <- dir[grep(".csv", dir)]
+  #for number of csv files
   for (i in 1:length(usable)){
+    #read file
     fil <- read.csv(file = usable[i], header = TRUE, stringsAsFactors = FALSE)
+    #column type
     y <- sapply(fil,class)
+    #column names
     z <- colnames(fil)
     print(paste("Which column of the file would you like to calculate the coefficient of variation for? The columns are" , z , "/" ,y))
     print("Please only select a column of integers or numerics.")
+    #input from user
     x <- as.name(readline())
+    #test if the column has more than 50 entries
     if (length(fil[[x]]) < 50){
       print("An accurate coefficient of variation should have at least 50 entries, and this column has less than 50.")
-      question <- (readline("Would you like to continue? Yes or No"))
-      if (question == "YES"){
-        mean <- mean(fil[[x]])
-        std <- sd(fil[[x]])
+      question <- (readline("Would you like to continue? Yes or No: "))
+      #if less than 50 entries ask user if they want to continue
+      if (question == "Yes"){
+        #mean and removes NA occurrences
+        mean <- mean(fil[[x]], na.rm = TRUE)
+        #standard deviation and removes NA occurrences
+        std <- sd(fil[[x]], na.rm = TRUE)
+        #coefficient of variation
         cov <- std/mean
+        #return vector
         fileCOV <- c(fileCOV, cov)
         i = i + 1
       }else {
         i = i +1
       }
     }
+    #if over 50 entries
     else {
-    mean <- mean(fil[[x]])
-    std <- sd(fil[[x]])
+      #mean and removes NA occurrences
+    mean <- mean(fil[[x]], na.rm = TRUE)
+    #standard deviation and removes NA occurrences
+    std <- sd(fil[[x]], na.rm = TRUE)
+    #coefficient of variation
     cov <- std/mean
+    #return vector
     fileCOV <- c(fileCOV, cov)
     i = i + 1
     }
   }
-  
+  #actual returning of vector
+  return(fileCOV)
 }
 coeffientOfVariation(dir)
-
-
-
-file <- read.csv(file="car-speeds.csv", header = TRUE, stringsAsFactors = FALSE)
-y <- sapply(file,class)
-z <- colnames(file)
-print(paste("Which column of wages.csv would you like to calculate the coefficient of variation for? The columns are" , z , "/" ,y))
-print("Please only select a column of integers or numerics.")
-x <- as.name(readline())
-if (length(file[[x]]) < 50){
-  print("An accurate coefficient of variation should have at least 50 entries, and this column has less than 50.")
-  question <- (readline("Would you like to continue? Yes or No"))
-  if (question == "YES"){
-    mean <- mean(file[[x]])
-    std <- sd(file[[x]])
-    cov <- std/mean
-    fileCOV <- c(fileCOV, cov)
-  }else{
-    print("Okay")
-  }
-}else {
-  mean <- mean(file[[x]])
-  std <- sd(file[[x]])
-  cov <- std/mean
-  fileCOV <- c(fileCOV, cov)
-}
-
-
-length(file$wage)
-
-mean <- mean(file[[x]])
-std <- sd(file[[x]])
-cov <- std/mean
-fileCOV <- c(fileCOV, cov)
-
-if (question == "YES"){
-  mean <- mean(file[[x]])
-  std <- sd(file[[x]])
-  cov <- std/mean
-  fileCOV <- c(fileCOV, cov)
-}else{
-  print("Okay")
-}
