@@ -1,21 +1,40 @@
-#create function that takes directory name as "dir" argument
-dirfunction<-function(dir){
-# read data from each file 
-# calculate coefficient of variation for specific column (return as vector)
-  read_data <- list.files(dir)
-  coefficient_of_var <- vector()
-  column_num <- readline("Select specific column")
-  column_num <- as.integer(column_num)
-  for(i in 1:length(read_data)){
-    setwd(dir)
-    data1 <- read.csv(read_data[i])
-    if (column_num > NCOL(data1)){
-      readline("")
+
+# define the function 
+coefficient_of_var<-function(dir,column_num,nrow=50){
+  
+# set working directory and create CoV vector
+  setwd(dir)
+  dataset <- list.files(dir)
+  CoV_vector <- vector()
+
+# calculate reliable coefficient of variation 
+  for(i in dataset){
+    i <- read.csv(dataset[i])
+    if (column_num > ncol(i)){
+      print("not valid -- choose lower column_num")
+      }
+    else {
+      # Report error for file with less than 50 observations
+      if(nrow(i) < 50){
+        print("error")
+        # Give option to override and continue with calculation 
+        x <- readline("Would you like to override? Please enter 'yes' or 'no': ")
+        if (x == "yes"){
+          print("Warning! Your file has less than 50 observations.")
+          # Calculate the coefficient of variation with an override
+          standard_dev<-sd(i[,column_num])
+          average<-mean(i[,col])
+          coeff_variation<-standard_dev/average
+        } else {
+          break
+        }
+  } else {
+      # Calculate the coefficient of variation for file with more than 50 obs
+      standard_dev<-sd(i[,column_num])
+      average<-mean(i[,column_num])
+      coeff_variation<-standard_dev/average
+      Cov_vector[i]<-coeff_variation
+      }
     }
+  } return(CoV_vector)
   }
-# Report error for file less than 50 observations
-  if(length(read_data) < 50){
-    print("error")
-    
-  }
-}
